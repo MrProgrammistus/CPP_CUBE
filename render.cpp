@@ -18,9 +18,9 @@ UniformBuffer* ubo_camera;
 Camera* camera;
 
 float vertices[] = {
-	0, 0, 0,
-	1, 0, 0,
-	1, 1, 0
+	-0.5f, -0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f,
+	 0.0f,  0.5f, 0.0f
 };
 
 float _render_time;
@@ -45,7 +45,7 @@ void start_render() {
 	::vao_cell = &vao_cell;
 	::ubo_camera = &ubo_camera;
 	::camera = &camera;
-
+	
 	glClearColor(0.3, 0.5, 0.7, 1);
 
 	start_triangle();
