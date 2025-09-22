@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
+#include <thread>
 
 #include "render.h"
 #include "shader.h"
@@ -23,16 +24,23 @@ float vertices[] = {
 	 0.0f,  0.5f, 0.0f
 };
 
+bool _render_timer_enable = true;
 float _render_time;
-void timer(HWND, UINT, UINT_PTR, DWORD) {
-	system("cls");
-	std::cout << 1000 / _render_time << " FPS" << std::endl;
+void _render_timer() {
+	while (_render_timer_enable)
+	{
+		system("cls");
+		std::cout << 1000 / _render_time << " FPS" << std::endl;
+		Sleep(1000);
+	}
 }
 
 void start_triangle() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
+void update_render(float);
+std::thread _render_timer_thread;
 void start_render() {
 	int config[] = { 3 };
 	static Shader shader_cell = Shader("cell_shader.vert", "cell_shader.frag");
@@ -51,7 +59,9 @@ void start_render() {
 	start_triangle();
 	::camera->Start();
 
-	SetTimer(0, 0, 1000, timer);
+	onUpdateEvent.insert(update_render);
+
+	_render_timer_thread = std::thread(_render_timer);
 }
 
 void update_triangle() {
@@ -68,4 +78,9 @@ void update_render(float time) {
 	update_triangle();
 
 	_render_time = time;
+}
+
+void stop_render() {
+	_render_timer_enable = false;
+	_render_timer_thread.join();
 }

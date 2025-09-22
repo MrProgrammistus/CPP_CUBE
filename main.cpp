@@ -5,20 +5,12 @@
 #include "window.h"
 #include "render.h"
 
-void _start() {
-	start_render();
-}
-
-void _update(float time) {
-	update_render(time);
-}
 
 int main() {
 	createWindow(192*5, 108*5, "Window");
 
-	start = _start;
-	update = _update;
-	loadWindow();
+	start_render();
 	runWindow();
+	stop_render();
 	return 0;
 }

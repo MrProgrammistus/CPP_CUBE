@@ -11,6 +11,18 @@ GLFWwindow* window;
 
 int width, height;
 
+std::set<void(*)(float)> onUpdateEvent;
+std::set<void(*)(float, float)> onResizeEvent;
+
+void _window_onResize(GLFWwindow * window, int w, int h)
+{
+	width = w;
+	height = h;
+	glViewport(0, 0, width, height);
+
+	for (void(*func)(float, float) : onResizeEvent) func(w, h);
+}
+
 void createWindow(int w, int h, const char* name) {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -21,19 +33,7 @@ void createWindow(int w, int h, const char* name) {
 	glewInit();
 	width = w;
 	height = h;
-	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int w, int h)
-	{
-		width = w;
-		height = h;
-		glViewport(0, 0, width, height);
-	});
-}
-
-void(*start)();
-void(*update)(float);
-
-void loadWindow() {
-	if (start != 0) start();
+	glfwSetWindowSizeCallback(window, _window_onResize);
 }
 
 float _window_time;
@@ -46,7 +46,7 @@ void runWindow() {
 
 		long time = clock();
 		_window_time = (_window_time * 1023 + time - last) / 1024;
-		if(update != 0) update(_window_time);
+		for (void(*func)(float) : onUpdateEvent) func(_window_time);
 		last = time;
 
 		glfwSwapBuffers(window);
