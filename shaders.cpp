@@ -94,8 +94,8 @@ VertexArray::VertexArray(int* config, int size) {
 
 	int offset = 0;
 	for (int i = 0; i < size; i++) {
-		glVertexAttribPointer(i, config[i], GL_FLOAT, false, sum * sizeof(float), (void*)(offset * sizeof(float)));
 		glEnableVertexAttribArray(i);
+		glVertexAttribPointer(i, config[i], GL_FLOAT, false, sum * sizeof(float), (void*)(offset * sizeof(float)));
 		offset += config[i];
 	}
 }

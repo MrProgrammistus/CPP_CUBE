@@ -1,8 +1,12 @@
-#version 330 core
+#version 450
 
-out vec4 color;
+out vec4 outColor;
 
-void main()
-{
-	color = vec4(1.0, 0.5, 0.2, 1.0);
+in vec3 pos;
+in vec3 norm;
+in vec4 color;
+in flat uint data;
+
+void main(){
+	outColor = color;
 }

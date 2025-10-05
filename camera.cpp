@@ -9,6 +9,10 @@ glm::mat4 Camera::GetView() {
 	return glm::perspective(1.57f, (float)width / height, 0.01f, 1000.0f) * glm::lookAt(pos, pos + dir, up);
 }
 
+glm::vec3 Camera::GetPos() {
+	return pos;
+}
+
 std::set<int> _camera_keys{};
 void _camera_key_callback(GLFWwindow* window, int key, int scan_code, int action, int mode) {
 	if (action == GLFW_PRESS)

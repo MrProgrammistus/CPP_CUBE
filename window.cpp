@@ -42,7 +42,7 @@ void runWindow() {
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		long time = clock();
 		_window_time = (_window_time * 1023 + time - last) / 1024;
