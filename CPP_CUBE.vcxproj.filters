@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="rules">
+      <UniqueIdentifier>{b9d7f58d-8d0e-44af-9459-8be364c287a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,10 +53,19 @@
     <ClInclude Include="field.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="life.h">
+      <Filter>rules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cell_shader.frag" />
-    <None Include="cell_shader.vert" />
-    <None Include="cell_shader.geom" />
+    <None Include="cell_shader.vert">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="cell_shader.geom">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="cell_shader.frag">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
 </Project>

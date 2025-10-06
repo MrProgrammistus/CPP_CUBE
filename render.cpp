@@ -54,22 +54,16 @@ void start_render() {
 	onUpdateEvent.insert(update_render);
 
 	_render_timer_thread = std::thread(_render_timer);
-
-	setCell(glm::ivec3{ 1, 1, 1 }, 1);
-	setCell(glm::ivec3{ 0, 0, 0 }, 1);
-	swapField();
-	setCell(glm::ivec3{ 1, 1, 1 }, 1);
-	setCell(glm::ivec3{ 0, 0, 0 }, 1);
 }
 
-void update_field() {
-	swapField();
-	int n = 0;
+int nm = 0;
+void render_field() {
+	nm = 0;
 	std::vector<float> data{};
 	for (int x = 0; x < FSIZE; x++) {
 		for (int y = 0; y < FSIZE; y++) {
 			for (int z = 0; z < FSIZE; z++) {
-				if (getCellWithoutCheck(glm::ivec3{x, y, z})) {
+				if (getCellWithoutCheck(x, y, z) != 0) {
 					unsigned _data = 0;
 					float __data[]{
 						1 + x, 0 + y, 0 + z,
@@ -104,7 +98,7 @@ void update_field() {
 						0, 0, -1, _data,
 					};
 					data.insert(data.end(), __data, std::end(__data));
-					n++;
+					nm++;
 				}
 			}
 		}
@@ -112,8 +106,8 @@ void update_field() {
 	shader_cell->use();
 	vao_cell->use();
 	vbo_cell->use();
-	glBufferData(GL_ARRAY_BUFFER, data.size() * 4, data.data(), GL_STREAM_DRAW);
-	glDrawArrays(GL_POINTS, 0, n * 6);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * 4, data.data(), GL_DYNAMIC_DRAW);
+	glDrawArrays(GL_POINTS, 0, nm * 6);
 }
 
 struct UBO_CAMERA_DATA {
@@ -128,7 +122,7 @@ void update_render(float time) {
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(data), &data, GL_STREAM_DRAW);
 	camera->Update(time);
 
-	update_field();
+	render_field();
 
 	_render_time = time;
 }

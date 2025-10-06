@@ -46,8 +46,8 @@ void _camera_mouse_callback(GLFWwindow* window, double x_pos, double y_pos) {
 		_camera_last_x = x_pos;
 		_camera_last_y = y_pos;
 
-		x_offset *= _camera_sensitivity * _camera_time;
-		y_offset *= _camera_sensitivity * _camera_time;
+		x_offset *= _camera_sensitivity;
+		y_offset *= _camera_sensitivity;
 
 		_camera_yaw += x_offset;
 		_camera_pitch += y_offset;
@@ -80,6 +80,7 @@ void Camera::Start() {
 }
 
 float _camera_base_speed = 0.01f;
+float _camera_boost = 5;
 float _camera_speed;
 bool _camera_esc_press;
 bool _camera_mouse_hide = true;
@@ -101,7 +102,7 @@ void Camera::Update(float time) {
 		if (_camera_keys.contains(GLFW_KEY_LEFT_SHIFT))
 			pos -= glm::normalize(up) * speed;
 		if (_camera_keys.contains(GLFW_KEY_LEFT_CONTROL))
-			_camera_speed = _camera_base_speed * 5;
+			_camera_speed = _camera_base_speed * _camera_boost;
 		else
 			_camera_speed = _camera_base_speed;
 	}

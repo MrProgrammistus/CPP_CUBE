@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="field.h" />
+    <ClInclude Include="life.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="window.h" />

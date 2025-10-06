@@ -4,7 +4,7 @@
 
 class Camera {
 private:
-	glm::vec3 pos{ 0.0, 0.0, 0.0 };
+	glm::vec3 pos{ -5, 45, 45 };
 	glm::vec3 dir{ 0.0, 0.0, -1.0 };
 	glm::vec3 up{ 0.0, 1.0, 0.0 };
 public:
