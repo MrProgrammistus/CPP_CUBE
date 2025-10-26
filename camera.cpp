@@ -4,6 +4,7 @@
 #include "window.h"
 #include <set>
 #include <iostream>
+#include "field.h"
 
 glm::mat4 Camera::GetView() {
 	return glm::perspective(1.57f, (float)width / height, 0.01f, 1000.0f) * glm::lookAt(pos, pos + dir, up);
@@ -27,7 +28,6 @@ int _camera_last_y;
 float _camera_yaw = -90;
 float _camera_pitch = 0;
 glm::vec3* _camera_dir;
-float _camera_time;
 extern bool _camera_mouse_hide;
 int _camera_center_x;
 int _camera_center_y;
@@ -85,22 +85,21 @@ float _camera_speed;
 bool _camera_esc_press;
 bool _camera_mouse_hide = true;
 void Camera::Update(float time) {
-	_camera_time = time;
 	
 	if (_camera_mouse_hide) {
 		float speed = _camera_speed * time;
 		if (_camera_keys.contains(GLFW_KEY_W))
-			pos += speed * glm::vec3(dir.x, 0, dir.z);
+			pos += speed * glm::normalize(glm::vec3(dir.x, 0, dir.z));
 		if (_camera_keys.contains(GLFW_KEY_S))
-			pos -= speed * glm::vec3(dir.x, 0, dir.z);
+			pos -= speed * glm::normalize(glm::vec3(dir.x, 0, dir.z));
 		if (_camera_keys.contains(GLFW_KEY_A))
-			pos -= glm::normalize(glm::cross(dir, up)) * speed;
+			pos -= glm::normalize(glm::normalize(glm::cross(dir, up))) * speed;
 		if (_camera_keys.contains(GLFW_KEY_D))
-			pos += glm::normalize(glm::cross(dir, up)) * speed;
+			pos += glm::normalize(glm::normalize(glm::cross(dir, up))) * speed;
 		if (_camera_keys.contains(GLFW_KEY_SPACE))
-			pos += glm::normalize(up) * speed;
+			pos += glm::normalize(glm::normalize(up)) * speed;
 		if (_camera_keys.contains(GLFW_KEY_LEFT_SHIFT))
-			pos -= glm::normalize(up) * speed;
+			pos -= glm::normalize(glm::normalize(up)) * speed;
 		if (_camera_keys.contains(GLFW_KEY_LEFT_CONTROL))
 			_camera_speed = _camera_base_speed * _camera_boost;
 		else
@@ -120,4 +119,9 @@ void Camera::Update(float time) {
 		_camera_esc_press = true;
 	}
 	else if (!_camera_keys.contains(GLFW_KEY_ESCAPE)) _camera_esc_press = false;
+
+	if (_camera_keys.contains(GLFW_KEY_R)) {
+		stop_field();
+		start_field();
+	}
 }

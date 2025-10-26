@@ -151,6 +151,7 @@
     <ClCompile Include="filed.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="render.cpp" />
+    <ClCompile Include="saver.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
@@ -159,6 +160,7 @@
     <ClInclude Include="field.h" />
     <ClInclude Include="life.h" />
     <ClInclude Include="render.h" />
+    <ClInclude Include="saver.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>

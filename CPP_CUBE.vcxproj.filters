@@ -36,6 +36,9 @@
     <ClCompile Include="filed.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="saver.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="window.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="life.h">
       <Filter>rules</Filter>
+    </ClInclude>
+    <ClInclude Include="saver.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

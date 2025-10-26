@@ -2,8 +2,9 @@
 #include "field.h"
 #include <iostream>
 #include <random>
+#include "saver.h"
 
-#define RANDOM3D
+#define RANDOM2D
 
 std::mt19937 r{};
 void life_init() {
@@ -14,18 +15,21 @@ void life_init() {
 	setCell(5, 0, 7, 1);
 	setCell(6, 0, 7, 1);
 	setCell(7, 0, 6, 1);
+	//save("glider.cpp_cube_save");
 #elifdef RANDOM3D
 	for (int i = 0; i < FSIZE; i++) {
-		for (int j = 0; j < FSIZE; j++) {
+		for (int j = 0; j < FYSIZE; j++) {
 			for (int k = 0; k < FSIZE; k++) {
-				if((r() & 3) == 0) setCell(i, j, k, 1);
+				if((r() & 5) == 0) setCell(i, j, k, 1);
 			}
 		}
 	}
 #elifdef RANDOM2D
 	for (int i = 0; i < FSIZE; i++) {
-		for (int k = 0; k < FSIZE; k++) {
-			if ((r() & 3) == 0) setCell(i, 0, k, 1);
+		for (int j = 0; j < FYSIZE; j++) {
+			for (int k = 0; k < FSIZE; k++) {
+				if ((r() & 3) == 0) setCell(i, j, k, 1);
+			}
 		}
 	}
 #endif
@@ -51,8 +55,7 @@ void life_rule(int x, int y, int z, int status) {
 	if ((status == 0 && (n >= A && n <= B)) || (status != 0 && (n >= C && n <= D))) setCell(x, y, z, 1);
 	else setCell(x, y, z, 0);
 #else
-	if (y != 0) return;
-	int n = getCellAroundCount(x, y, z, 1);
+	int n = getCellAroundCountIn2D(x, y, z, 1);
 	if ((status == 0 && (n >= 3 && n <= 3)) || (status != 0 && (n >= 2 && n <= 3))) setCell(x, y, z, 1);
 	else setCell(x, y, z, 0);
 #endif
