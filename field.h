@@ -1,16 +1,18 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <vector>
+#include "interface.h"
 
-// NOTSAVE_MODE | SAVE_MODE | LOAD_MODE
-#define SAVE_MODE
-#define FSIZE 200
-#define FYSIZE 1
+extern std::vector<glm::ivec4> agents;
+int getAgent(int x, int y, int z);
 
 int getCellWithoutCheck(int x, int y, int z);
 int getInvertCellWithoutCheck(int x, int y, int z);
 int getCell(int x, int y, int z);
 int getCellOrZero(int x, int y, int z);
 void setCell(int x, int y, int z, int cell);
+void set2Cell(int x, int y, int z, int cell);
+void setCellWithoutCheck(int x, int y, int z, int cell);
 void swapField();
 void start_field();
 void stop_field();

@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
-
-#define PATH ""
+#include "interface.h"
 
 void save(std::string name);
 void load(std::string name);

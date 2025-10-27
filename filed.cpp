@@ -4,9 +4,16 @@
 #include <Windows.h>
 #include <iostream>
 #include "render.h"
-#include "life.h"
 #include "saver.h"
+#include "loader.h"
 #include <time.h>
+
+// применяемые правила
+#include "ant.h"
+
+
+std::vector<glm::ivec4> agents{};
+std::vector<glm::ivec4> agents_buff{};
 
 namespace fld {
 	int field[2][FSIZE][FYSIZE][FSIZE]{};
@@ -25,11 +32,27 @@ namespace fld {
 
 	bool stop;
 	void update_field_thread() {
-		start_save();
 		Sleep(2000);
+#ifdef LOAD_MODE
 		while (!stop)
 		{
+			int x, y, z, c;
+			while (getNextPosedInt(x, y, z, c)) {
+				fld::field[0][x][y][z] = fld::field[1][x][y][z] = c;
+			}
+			swapField();
+			//Sleep(100);
+		}
+#else // not LOAD_MODE
+#ifdef SAVE_MODE
+		start_save();
+#endif // SAVE_MODE
+		while (!stop)
+		{
+#ifdef SAVE_MODE
 			add_save();
+#endif // SAVE_MODE
+#ifdef CELL_MODE
 			for (int i = 0; i < FSIZE; i++) {
 				for (int j = 0; j < FYSIZE; j++) {
 					for (int k = 0; k < FSIZE; k++) {
@@ -37,10 +60,21 @@ namespace fld {
 					}
 				}
 			}
+			//Sleep(50);
+#else // not CELL_MODE
+			agents_buff = std::vector<glm::ivec4>(agents);
+			for (int i = 0; i < agents_buff.size(); ++i) {
+				int x = agents_buff[i].x, y = agents_buff[i].y, z = agents_buff[i].z;
+				game_rule(x, y, z, fld::field[fld::ifr][x][y][z]);
+			}
+			Sleep(1);
+#endif
 			swapField();
-			Sleep(50);
 		}
-		stop_save();
+#ifdef SAVE_MODE
+			stop_save();
+#endif // SAVE_MODE
+#endif // LOAD_MODE
 	}
 	void render_field_thread() {
 		Sleep(2000);
@@ -50,6 +84,11 @@ namespace fld {
 			render_field();
 		}
 	}
+}
+
+int getAgent(int x, int y, int z) {
+	for (int i = 0; i < agents.size(); ++i) if (agents[i].x == x && agents[i].y == y && agents[i].z == z) return i;
+	return -1;
 }
 
 int getCellWithoutCheck(int x, int y, int z) {
@@ -75,6 +114,17 @@ void setCell(int x, int y, int z, int cell) {
 	fld::check(x);
 	fld::checkY(y);
 	fld::check(z);
+	fld::field[!fld::ifr][x][y][z] = cell;
+}
+void set2Cell(int x, int y, int z, int cell) {
+	fld::check(x);
+	fld::checkY(y);
+	fld::check(z);
+	fld::field[fld::ifr][x][y][z] = cell;
+	fld::field[!fld::ifr][x][y][z] = cell;
+}
+
+void setCellWithoutCheck(int x, int y, int z, int cell) {
 	fld::field[!fld::ifr][x][y][z] = cell;
 }
 
@@ -109,6 +159,17 @@ std::thread thread;
 std::thread render_thread;
 void start_field() {
 	fld::stop = false;
+	agents.clear();
+#ifdef LOAD_MODE
+	load();
+	for (int i = 0; i < FSIZE; i++) {
+		for (int j = 0; j < FYSIZE; j++) {
+			for (int k = 0; k < FSIZE; k++) {
+				fld::field[0][i][j][k] = fld::field[1][i][j][k] = getNextInt();
+			}
+		}
+	}
+#else
 	for (int i = 0; i < FSIZE; i++) {
 		for (int j = 0; j < FYSIZE; j++) {
 			for (int k = 0; k < FSIZE; k++) {
@@ -117,9 +178,9 @@ void start_field() {
 			}
 		}
 	}
-
 	fld::game_rule = life_rule;
 	life_init();
+#endif
 
 	swapField();
 	render_field();

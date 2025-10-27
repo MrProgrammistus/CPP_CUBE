@@ -23,12 +23,12 @@ void save(std::string name) {
 	//CreateDirectory((const WCHAR*)(PATH), NULL);
 	file.open(PATH + name);
 
-	file << FSIZE << " " << FYSIZE << "\n";
+	file << FSIZE << ' ' << FYSIZE << '\n';
 
 	for (int i = 0; i < FSIZE; i++) {
 		for (int j = 0; j < FYSIZE; j++) {
 			for (int k = 0; k < FSIZE; k++) {
-				file << (char)getInvertCellWithoutCheck(i, j, k) << " ";
+				file << (char)getInvertCellWithoutCheck(i, j, k) << ' ';
 			}
 		}
 	}
@@ -37,7 +37,6 @@ void save(std::string name) {
 
 void start_save() {
 
-	std::cout << getTime();
 	file.open(PATH + getTime() + std::string(".cpp_cube_save"));
 
 	file << FSIZE << ' ' << FYSIZE << '\n';
@@ -57,12 +56,12 @@ void add_save() {
 		for (int j = 0; j < FYSIZE; j++) {
 			for (int k = 0; k < FSIZE; k++) {
 				if (getCellWithoutCheck(i, j, k) != getInvertCellWithoutCheck(i, j, k)) {
-					file << i << ' ' << j << ' ' << k << ' ' << getCellWithoutCheck(i, j, k) << "    ";
+					file << i << ' ' << j << ' ' << k << ' ' << getCellWithoutCheck(i, j, k) << '\t';
 				}
 			}
 		}
 	}
-	file << -1 << "\n";
+	file << -1 << '\n';
 }
 
 void stop_save() {

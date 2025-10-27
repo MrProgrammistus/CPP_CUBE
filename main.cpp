@@ -5,9 +5,11 @@
 #include "window.h"
 #include "render.h"
 #include "field.h"
+#include <iostream>
 
 
 int main() {
+	setlocale(LC_ALL, "");
 	createWindow(192*5, 108*5, "Window");
 
 	start_render();
