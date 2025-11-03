@@ -41,7 +41,7 @@ namespace fld {
 				fld::field[0][x][y][z] = fld::field[1][x][y][z] = c;
 			}
 			swapField();
-			//Sleep(100);
+			Sleep(DELAY);
 		}
 #else // not LOAD_MODE
 #ifdef SAVE_MODE
@@ -60,14 +60,21 @@ namespace fld {
 					}
 				}
 			}
-			//Sleep(50);
+			Sleep(DELAY);
 #else // not CELL_MODE
+			for (int i = 0; i < FSIZE; i++) {
+				for (int j = 0; j < FYSIZE; j++) {
+					for (int k = 0; k < FSIZE; k++) {
+						setCell(i, j, k, getCell(i, j, k));
+					}
+				}
+			}
 			agents_buff = std::vector<glm::ivec4>(agents);
 			for (int i = 0; i < agents_buff.size(); ++i) {
 				int x = agents_buff[i].x, y = agents_buff[i].y, z = agents_buff[i].z;
 				game_rule(x, y, z, fld::field[fld::ifr][x][y][z]);
 			}
-			Sleep(1);
+			Sleep(DELAY);
 #endif
 			swapField();
 		}
@@ -89,6 +96,12 @@ namespace fld {
 int getAgent(int x, int y, int z) {
 	for (int i = 0; i < agents.size(); ++i) if (agents[i].x == x && agents[i].y == y && agents[i].z == z) return i;
 	return -1;
+}
+void setAgent(int i, int x, int y, int z, int w) {
+	fld::check(x);
+	fld::checkY(y);
+	fld::check(z);
+	agents[i] = glm::vec4(x, y, z, w);
 }
 
 int getCellWithoutCheck(int x, int y, int z) {

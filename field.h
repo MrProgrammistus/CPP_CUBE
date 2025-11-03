@@ -5,6 +5,7 @@
 
 extern std::vector<glm::ivec4> agents;
 int getAgent(int x, int y, int z);
+void setAgent(int i, int x, int y, int z, int w);
 
 int getCellWithoutCheck(int x, int y, int z);
 int getInvertCellWithoutCheck(int x, int y, int z);
