@@ -4,7 +4,7 @@
 //#include "saver.h"
 #include "field.h"
 
-#define RANDOM2D
+#define RANDOM3D
 
 std::mt19937 r{};
 void life_init() {
@@ -44,10 +44,10 @@ void life_init() {
 // живые камни            10-20-9-20 10-20-9-21
 // мертвые камни          10-20-9-24
 // мертвые растущие камни 10-20-9-25
-#define A 10
-#define B 20
-#define C 9
-#define D 20
+#define A 7
+#define B 8
+#define C 6
+#define D 11
 
 void life_rule(int x, int y, int z, int status) {
 #ifdef RANDOM3D

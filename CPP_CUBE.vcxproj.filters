@@ -42,6 +42,9 @@
     <ClCompile Include="loader.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="analyzer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="window.h">
@@ -74,6 +77,12 @@
     <ClInclude Include="ant.h">
       <Filter>rules</Filter>
     </ClInclude>
+    <ClInclude Include="snake.h">
+      <Filter>rules</Filter>
+    </ClInclude>
+    <ClInclude Include="analyzer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cell_shader.vert">
@@ -83,6 +92,15 @@
       <Filter>Файлы ресурсов</Filter>
     </None>
     <None Include="cell_shader.frag">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="simple_shader.frag">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="simple_shader.vert">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="simple_shader_2d.vert">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>

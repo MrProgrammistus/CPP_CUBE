@@ -23,7 +23,15 @@ out flat uint data;
 void light() {
 	vec3 to_player = normalize(player - pos);
 	float angle = max(dot(norm, to_player), 0);
+	
 	color = vec4(1, 1, 1, 1);
+	if((data&7) == 2) color = vec4(1, 1, 0, 1);
+	if((data&7) == 3) color = vec4(1, 0, 1, 1);
+	if((data&7) == 4) color = vec4(0, 1, 1, 1);
+	if((data&7) == 5) color = vec4(1, 0, 0, 1);
+	if((data&7) == 6) color = vec4(0, 1, 0, 1);
+	if((data&7) == 7) color = vec4(0, 0, 1, 1);
+
 	color.xyz *= angle;
 }
 

@@ -1,9 +1,9 @@
 #pragma once
 
 // режим: NOTSAVE_MODE | SAVE_MODE | LOAD_MODE
-#define LOAD_MODE
+#define NOTSAVE_MODE
 // размеры по X и Y
-#define FSIZE 200
+#define FSIZE 100
 // размеры по Z
 #define FYSIZE 1
 
@@ -11,7 +11,7 @@
 #define AGENT_MODE
 
 // задержка кадра симуляции
-#define DELAY 0
+#define DELAY 1
 
 // путь сохранения
 #define PATH ""

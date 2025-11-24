@@ -20,6 +20,14 @@ VertexArray* vao_cell;
 UniformBuffer* ubo_camera;
 Camera* camera;
 
+Shader* shader_simple;
+VertexBuffer* vbo_simple;
+VertexArray* vao_simple;
+
+Shader* shader_simple_2d;
+VertexBuffer* vbo_simple_2d;
+VertexArray* vao_simple_2d;
+
 bool _render_timer_enable = true;
 float _render_time;
 void _render_timer() {
@@ -34,10 +42,10 @@ void _render_timer() {
 void update_render(float);
 std::thread _render_timer_thread;
 void start_render() {
-	int config[] = { 3, 3, 3, 3, 3, 1 };
+	int config1[] = { 3, 3, 3, 3, 3, 1 };
 	static Shader shader_cell = Shader("cell_shader.vert", "cell_shader.geom", "cell_shader.frag");
 	static VertexBuffer vbo_cell = VertexBuffer();
-	static VertexArray vao_cell = VertexArray(config, 6);
+	static VertexArray vao_cell = VertexArray(config1, 6);
 	static UniformBuffer ubo_camera = UniformBuffer(0);
 	static Camera camera{};
 	::shader_cell = &shader_cell;
@@ -45,6 +53,22 @@ void start_render() {
 	::vao_cell = &vao_cell;
 	::ubo_camera = &ubo_camera;
 	::camera = &camera;
+
+	int config2[] = { 3 };
+	static Shader shader_simple = Shader("simple_shader.vert", "simple_shader.frag");
+	static VertexBuffer vbo_simple = VertexBuffer();
+	static VertexArray vao_simple = VertexArray(config2, 1);
+	::shader_simple = &shader_simple;
+	::vbo_simple = &vbo_simple;
+	::vao_simple = &vao_simple;
+
+	int config3[] = { 2 };
+	static Shader shader_simple_2d = Shader("simple_shader_2d.vert", "simple_shader.frag");
+	static VertexBuffer vbo_simple_2d = VertexBuffer();
+	static VertexArray vao_simple_2d = VertexArray(config3, 1);
+	::shader_simple_2d = &shader_simple_2d;
+	::vbo_simple_2d = &vbo_simple_2d;
+	::vao_simple_2d = &vao_simple_2d;
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -55,6 +79,28 @@ void start_render() {
 	onUpdateEvent.insert(update_render);
 
 	_render_timer_thread = std::thread(_render_timer);
+
+	float line_cube[72]{
+		0, 0, 0,				FSIZE, 0, 0,
+		FSIZE, 0, 0,			FSIZE, 0, FSIZE,
+		FSIZE, 0, FSIZE,		0, 0, FSIZE,
+		0, 0, FSIZE,			0, 0, 0,
+
+		0, FYSIZE, 0,			FSIZE, FYSIZE, 0,
+		FSIZE, FYSIZE, 0,		FSIZE, FYSIZE, FSIZE,
+		FSIZE, FYSIZE, FSIZE,	0, FYSIZE, FSIZE,
+		0, FYSIZE, FSIZE,		0, FYSIZE, 0,
+
+		0, 0, 0,				0, FYSIZE, 0,
+		FSIZE, 0, 0,			FSIZE, FYSIZE, 0,
+		FSIZE, 0, FSIZE,		FSIZE, FYSIZE, FSIZE,
+		0, 0, FSIZE,			0, FYSIZE, FSIZE,
+	};
+
+	shader_simple.use();
+	vao_simple.use();
+	vbo_simple.use();
+	glBufferData(GL_ARRAY_BUFFER, 72 * 4, line_cube, GL_STATIC_DRAW);
 }
 
 int nm = 0;
@@ -69,7 +115,8 @@ void render_field() {
 		for (int y = 0; y < FYSIZE; y++) {
 			for (int z = 0; z < FSIZE; z++) {
 				if (getCellWithoutCheck(x, y, z) != 0) {
-					unsigned _data = 0;
+					int _i_data = getCellWithoutCheck(x, y, z);
+					float _data = reinterpret_cast<float&>(_i_data);
 					std::vector<float> __data{};
 					if (getCellOrZero(x + 1, y, z) == 0) { // X+
 						float ___data[]{
@@ -80,6 +127,7 @@ void render_field() {
 							1, 0, 0, _data,
 						};
 						__data.insert(__data.end(), ___data, std::end(___data));
+						nm++;
 					}
 					if (getCellOrZero(x - 1, y, z) == 0) { // X-
 						float ___data[]{
@@ -90,6 +138,7 @@ void render_field() {
 							-1, 0, 0, _data,
 						};
 						__data.insert(__data.end(), ___data, std::end(___data));
+						nm++;
 					}
 					if (getCellOrZero(x, y + 1, z) == 0) { // Y+
 						float ___data[]{
@@ -100,6 +149,7 @@ void render_field() {
 							0, 1, 0, _data,
 						};
 						__data.insert(__data.end(), ___data, std::end(___data));
+						nm++;
 					}
 					if (getCellOrZero(x, y - 1, z) == 0) { // Y-
 						float ___data[]{
@@ -110,6 +160,7 @@ void render_field() {
 							0, -1, 0, _data,
 						};
 						__data.insert(__data.end(), ___data, std::end(___data));
+						nm++;
 					}
 					if (getCellOrZero(x, y, z + 1) == 0) { // Z+
 						float ___data[]{
@@ -120,6 +171,7 @@ void render_field() {
 							0, 0, 1, _data,
 						};
 						__data.insert(__data.end(), ___data, std::end(___data));
+						nm++;
 					}
 					if (getCellOrZero(x, y, z - 1) == 0) { // Z-
 						float ___data[]{
@@ -130,42 +182,9 @@ void render_field() {
 							0, 0, -1, _data,
 						};
 						__data.insert(__data.end(), ___data, std::end(___data));
+						nm++;
 					}
-					/*float __data[]{
-						1 + x, 0 + y, 0 + z,
-						1 + x, 1 + y, 0 + z,
-						1 + x, 0 + y, 1 + z,
-						1 + x, 1 + y, 1 + z,
-						1, 0, 0, _data,
-						0 + x, 0 + y, 0 + z,
-						0 + x, 0 + y, 1 + z,
-						0 + x, 1 + y, 0 + z,
-						0 + x, 1 + y, 1 + z,
-						-1, 0, 0, _data,
-						0 + x, 1 + y, 0 + z,
-						0 + x, 1 + y, 1 + z,
-						1 + x, 1 + y, 0 + z,
-						1 + x, 1 + y, 1 + z,
-						0, 1, 0, _data,
-						0 + x, 0 + y, 0 + z,
-						1 + x, 0 + y, 0 + z,
-						0 + x, 0 + y, 1 + z,
-						1 + x, 0 + y, 1 + z,
-						0, -1, 0, _data,
-						0 + x, 0 + y, 1 + z,
-						1 + x, 0 + y, 1 + z,
-						0 + x, 1 + y, 1 + z,
-						1 + x, 1 + y, 1 + z,
-						0, 0, 1, _data,
-						0 + x, 0 + y, 0 + z,
-						0 + x, 1 + y, 0 + z,
-						1 + x, 0 + y, 0 + z,
-						1 + x, 1 + y, 0 + z,
-						0, 0, -1, _data,
-					};*/
-					//data.insert(data.end(), __data, std::end(__data));
 					data.insert(data.end(), __data.begin(), __data.end());
-					nm++;
 				}
 			}
 		}
@@ -183,8 +202,13 @@ void load_data_to_gpu() {
 		nmm = nm;
 		reload = false;
 	}
-	glDrawArrays(GL_POINTS, 0, nmm * 6);
+	glDrawArrays(GL_POINTS, 0, nmm);
 	lock_render = false; // разрешить обновлять вершины
+
+	shader_simple->use();
+	vao_simple->use();
+	vbo_simple->use();
+	glDrawArrays(GL_LINES, 0, 72 / 3);
 }
 
 
