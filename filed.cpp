@@ -9,7 +9,11 @@
 #include <time.h>
 
 // применяемые правила
+#ifndef DLL_NAME
 #include "ant.h"
+#endif // !DLL_NAME
+
+
 
 
 std::vector<glm::ivec4> agents{};
@@ -31,11 +35,21 @@ namespace fld {
 	}
 
 	bool stop;
+	bool pause;
+	bool next_frame;
 	void update_field_thread() {
 		Sleep(2000);
 #ifdef LOAD_MODE
 		while (!stop)
 		{
+			while (pause && !stop) {
+				Sleep(100);
+				if (next_frame) {
+					next_frame = false;
+					goto nf;
+				}
+			}
+		nf:;
 			int x, y, z, c;
 			while (getNextPosedInt(x, y, z, c)) {
 				fld::field[0][x][y][z] = fld::field[1][x][y][z] = c;
@@ -49,6 +63,14 @@ namespace fld {
 #endif // SAVE_MODE
 		while (!stop)
 		{
+			while (pause && !stop) {
+				Sleep(100);
+				if (next_frame) {
+					next_frame = false;
+					goto nf;
+				}
+			}
+		nf:;
 #ifdef SAVE_MODE
 			add_save();
 #endif // SAVE_MODE
@@ -191,8 +213,26 @@ void start_field() {
 			}
 		}
 	}
+
+
+#ifndef DLL_NAME
 	fld::game_rule = life_rule;
 	life_init();
+#else
+	HMODULE lib = LoadLibraryA(DLL_NAME);
+	((void(*)(
+		int, int, std::vector<glm::ivec4>*,
+		int(*getCell)(int, int, int),
+		void(*setCell)(int, int, int, int),
+		int(*getAgent)(int, int, int),
+		void(*setAgent)(int, int, int, int, int),
+		int(*getCellAroundCount)(int, int, int, int),
+		int(*getCellAroundCountIn2D)(int, int, int, int)))GetProcAddress(lib, "load_api"))(FSIZE, FYSIZE, &agents, &getCell, &setCell, &getAgent, &setAgent, &getCellAroundCount, &getCellAroundCountIn2D);
+	fld::game_rule = (void(*)(int, int, int, int))GetProcAddress(lib, "rule");
+	GetProcAddress(lib, "init")();
+#endif // !DLL_NAME
+
+
 #endif
 
 	swapField();
@@ -205,4 +245,15 @@ void stop_field() {
 	fld::stop = true;
 	thread.join();
 	render_thread.join();
+}
+
+void pause_field() {
+	fld::pause = true;
+}
+void resume_field() {
+	fld::pause = false;
+}
+
+void next_frame() {
+	fld::next_frame = true;
 }

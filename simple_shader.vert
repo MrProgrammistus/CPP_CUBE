@@ -7,6 +7,9 @@ layout(std140, binding = 0) uniform camera {
 	vec3 player;
 };
 
+out vec4 color;
+
 void main() {
+	color = vec4(1, 0, 0, 1);
 	gl_Position = view * vec4(aPos, 1);
 }

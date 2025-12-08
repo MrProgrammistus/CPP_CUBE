@@ -17,3 +17,7 @@
 #define PATH ""
 // файл загрузки
 #define FILENAME "Mon Nov  3 21.28.13 2025.cpp_cube_save"
+
+// загрузка правил из dll
+//#define DLL_NAME "LIFE_GAME_DLL.dll"
+#define DLL_NAME "ANT_DLL.dll"

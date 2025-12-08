@@ -77,9 +77,6 @@
     <ClInclude Include="ant.h">
       <Filter>rules</Filter>
     </ClInclude>
-    <ClInclude Include="snake.h">
-      <Filter>rules</Filter>
-    </ClInclude>
     <ClInclude Include="analyzer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

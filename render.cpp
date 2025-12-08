@@ -62,10 +62,10 @@ void start_render() {
 	::vbo_simple = &vbo_simple;
 	::vao_simple = &vao_simple;
 
-	int config3[] = { 2 };
+	int config3[] = { 2, 1 };
 	static Shader shader_simple_2d = Shader("simple_shader_2d.vert", "simple_shader.frag");
 	static VertexBuffer vbo_simple_2d = VertexBuffer();
-	static VertexArray vao_simple_2d = VertexArray(config3, 1);
+	static VertexArray vao_simple_2d = VertexArray(config3, 2);
 	::shader_simple_2d = &shader_simple_2d;
 	::vbo_simple_2d = &vbo_simple_2d;
 	::vao_simple_2d = &vao_simple_2d;
@@ -191,6 +191,16 @@ void render_field() {
 	}
 	reload = true;
 }
+
+bool reload_2d;
+void* a_data_ptr;
+int a_data_ptr_l;
+void upload_analyzer_data(void* data, int data_l) {
+	a_data_ptr = data;
+	a_data_ptr_l = data_l;
+	reload_2d = true;
+}
+
 int nmm;
 void load_data_to_gpu() {
 	shader_cell->use();
@@ -198,17 +208,28 @@ void load_data_to_gpu() {
 	vbo_cell->use();
 	lock_render = true; // запретить обновлять вершины
 	if (reload) {
-		glBufferData(GL_ARRAY_BUFFER, data.size() * 4, data.data(), GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, data.size() * 4, data.data(), GL_STREAM_DRAW);
 		nmm = nm;
 		reload = false;
 	}
 	glDrawArrays(GL_POINTS, 0, nmm);
 	lock_render = false; // разрешить обновлять вершины
 
+
 	shader_simple->use();
 	vao_simple->use();
 	vbo_simple->use();
 	glDrawArrays(GL_LINES, 0, 72 / 3);
+
+
+	shader_simple_2d->use();
+	vao_simple_2d->use();
+	vbo_simple_2d->use();
+	if (reload_2d) {
+		glBufferData(GL_ARRAY_BUFFER, a_data_ptr_l * 4, a_data_ptr, GL_DYNAMIC_DRAW);
+		reload_2d = false;
+	}
+	glDrawArrays(GL_LINES, 0, a_data_ptr_l / 3);
 }
 
 

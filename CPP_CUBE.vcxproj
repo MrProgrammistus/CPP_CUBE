@@ -24,6 +24,7 @@
     <ProjectGuid>{c7dbb3c0-d84e-43ba-a82a-a3409a4209f0}</ProjectGuid>
     <RootNamespace>CPPCUBE</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>.CPP_CUBE</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -168,7 +169,6 @@
     <ClInclude Include="render.h" />
     <ClInclude Include="saver.h" />
     <ClInclude Include="shader.h" />
-    <ClInclude Include="snake.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>
