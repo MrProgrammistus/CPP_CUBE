@@ -17,3 +17,5 @@ public:
 	void Start();
 	void Update(float);
 };
+
+extern bool f1;

@@ -7,12 +7,15 @@
 #include <GLFW/glfw3.h>
 #include <thread>
 #include <vector>
+#include <string>
 
 #include "render.h"
 #include "shader.h"
 #include "camera.h"
 #include "window.h"
 #include "field.h"
+#include "text2bitmap.h"
+
 
 Shader* shader_cell;
 VertexBuffer* vbo_cell;
@@ -27,6 +30,10 @@ VertexArray* vao_simple;
 Shader* shader_simple_2d;
 VertexBuffer* vbo_simple_2d;
 VertexArray* vao_simple_2d;
+
+Shader* shader_texture_2d;
+VertexBuffer* vbo_texture_2d;
+VertexArray* vao_texture_2d;
 
 bool _render_timer_enable = true;
 float _render_time;
@@ -70,8 +77,18 @@ void start_render() {
 	::vbo_simple_2d = &vbo_simple_2d;
 	::vao_simple_2d = &vao_simple_2d;
 
+	int config4[] = { 2, 2 };
+	static Shader shader_texture_2d = Shader("texture_shader_2d.vert", "texture_shader_2d.frag");
+	static VertexBuffer vbo_texture_2d = VertexBuffer();
+	static VertexArray vao_texture_2d = VertexArray(config4, 2);
+	::shader_texture_2d = &shader_texture_2d;
+	::vbo_texture_2d = &vbo_texture_2d;
+	::vao_texture_2d = &vao_texture_2d;
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glClearColor(0.3, 0.5, 0.7, 1);
 
 	::camera->Start();
@@ -101,7 +118,35 @@ void start_render() {
 	vao_simple.use();
 	vbo_simple.use();
 	glBufferData(GL_ARRAY_BUFFER, 72 * 4, line_cube, GL_STATIC_DRAW);
+
+
+	shader_texture_2d.use();
+	vao_texture_2d.use();
+	vbo_texture_2d.use();
+
+
+
+#define OFFSET 0.3f
+	float textWindow[24]{
+			OFFSET, 0, 0, 1,
+			1 + OFFSET, 0, 1, 1,
+			OFFSET, 1, 0, 0,
+			OFFSET, 1, 0, 0,
+			1 + OFFSET, 0, 1, 1,
+			1 + OFFSET, 1, 1, 0,
+	};
+
+	init();
+	unsigned int tex;
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glBufferData(GL_ARRAY_BUFFER, 24 * 4, textWindow, GL_STATIC_DRAW);
+
 }
+int tx = 1000, ty = 500;
 
 int nm = 0;
 std::vector<float> data{};
@@ -230,6 +275,14 @@ void load_data_to_gpu() {
 		reload_2d = false;
 	}
 	glDrawArrays(GL_LINES, 0, a_data_ptr_l / 3);
+
+
+	shader_texture_2d->use();
+	vao_texture_2d->use();
+	vbo_texture_2d->use();
+	void* ptr = text2bitmap(tx, ty);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tx, ty, 0, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
+	glDrawArrays(GL_TRIANGLES, 0, 24 / 4);
 }
 
 

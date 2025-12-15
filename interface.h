@@ -3,12 +3,12 @@
 // режим: NOTSAVE_MODE | SAVE_MODE | LOAD_MODE
 #define NOTSAVE_MODE
 // размеры по X и Y
-#define FSIZE 100
+#define FSIZE 200
 // размеры по Z
 #define FYSIZE 1
 
 // режим симул€ции: CELL_MODE | AGENT_MODE
-#define AGENT_MODE
+#define CELL_MODE
 
 // задержка кадра симул€ции
 #define DELAY 1
@@ -20,4 +20,4 @@
 
 // загрузка правил из dll
 //#define DLL_NAME "LIFE_GAME_DLL.dll"
-#define DLL_NAME "ANT_DLL.dll"
+//#define DLL_NAME "ANT_DLL.dll"

@@ -45,6 +45,9 @@
     <ClCompile Include="analyzer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="text2bitmap.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="window.h">
@@ -80,6 +83,9 @@
     <ClInclude Include="analyzer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="text2bitmap.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cell_shader.vert">
@@ -98,6 +104,12 @@
       <Filter>Файлы ресурсов</Filter>
     </None>
     <None Include="simple_shader_2d.vert">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="texture_shader_2d.frag">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="texture_shader_2d.vert">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>

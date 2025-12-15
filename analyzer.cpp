@@ -9,7 +9,7 @@
 #include <set>
 
 #define STEP_X 0.001f
-#define STEP_Y 0.00005f
+#define STEP_Y 0.0003f
 #define A_DELAY 20
 
 struct LINE {

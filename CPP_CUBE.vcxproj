@@ -156,6 +156,7 @@
     <ClCompile Include="render.cpp" />
     <ClCompile Include="saver.cpp" />
     <ClCompile Include="shaders.cpp" />
+    <ClCompile Include="text2bitmap.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="render.h" />
     <ClInclude Include="saver.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="text2bitmap.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +187,8 @@
     <None Include="simple_shader.frag" />
     <None Include="simple_shader.vert" />
     <None Include="simple_shader_2d.vert" />
+    <None Include="texture_shader_2d.frag" />
+    <None Include="texture_shader_2d.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

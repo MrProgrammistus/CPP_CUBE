@@ -97,6 +97,8 @@ void Camera::Start() {
 	glfwSetCursorPos(window, _camera_center_x, _camera_center_y);
 }
 
+bool f1;
+bool _f1;
 float _camera_base_speed = 0.01f;
 float _camera_boost = 5;
 float _camera_speed;
@@ -141,8 +143,18 @@ void Camera::Update(float time) {
 		c_space_enter = true;
 	}
 	else if(!_camera_keys.contains(GLFW_KEY_F)) c_space_enter = false;
-	if (_camera_keys.contains(GLFW_KEY_RIGHT)) {
+	if (_camera_keys.contains(GLFW_KEY_V)) {
 		next_frame();
 		next_step();
 	}
+	if (_camera_keys.contains(GLFW_KEY_F1) && !_f1) {
+		if (!f1) {
+			f1 = true;
+		}
+		else {
+			f1 = false;
+		}
+		_f1 = true;
+	}
+	else if (!_camera_keys.contains(GLFW_KEY_F1)) _f1 = false;
 }

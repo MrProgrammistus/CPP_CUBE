@@ -10,10 +10,10 @@
 
 // применяемые правила
 #ifndef DLL_NAME
-#include "ant.h"
+#include "life.h"
 #endif // !DLL_NAME
 
-
+int step;
 
 
 std::vector<glm::ivec4> agents{};
@@ -54,6 +54,7 @@ namespace fld {
 			while (getNextPosedInt(x, y, z, c)) {
 				fld::field[0][x][y][z] = fld::field[1][x][y][z] = c;
 			}
+			step++;
 			swapField();
 			Sleep(DELAY);
 		}
@@ -98,6 +99,7 @@ namespace fld {
 			}
 			Sleep(DELAY);
 #endif
+			step++;
 			swapField();
 		}
 #ifdef SAVE_MODE

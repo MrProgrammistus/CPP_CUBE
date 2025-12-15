@@ -22,3 +22,5 @@ void stop_field();
 void pause_field();
 void resume_field();
 void next_frame();
+
+extern int step;
